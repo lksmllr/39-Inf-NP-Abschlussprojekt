@@ -1,0 +1,5 @@
+in top dir of flaskr use:
+  set FLASK_APP=flaskr
+  set FLASK_ENV=development
+  flask run
+; to run server.
