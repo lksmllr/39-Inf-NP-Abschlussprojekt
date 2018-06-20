@@ -5,6 +5,12 @@ Abschlussprojekt: Modulbezeichnung "39-Inf-NP Netzwerkprogrammierung", Universit
 # Projektbeschreibung
 Im Rahmen dieses Projekts soll eine Client-/ Serverlösung für so genannte ThinClients entwickelt werden. Diese soll die Verwaltung und Administration der Clients implementieren. 
 
+# ThinClients
+Basieren auf dedizierter Hardware und sind äußerst Energiesparend.
+Da es keine beweglichen Teile - wie Lüfter - gibt, sind sie äußerst Robust. 
+Sie bieten wenig bis keine Erweiterungsoptionen.
+ThinClients verfügen über Standard I/O Anschlüsse.
+Es besteht die Möglichkeit ein minimalistisches Unix System auszuführen. Dazu gehören bspw. Tiny Core, Igel OS, etc.
 
 # Motivation
 Heutzutage betreiben viel große Unternehmen eigene Server oder mieten solche. Wenn es darum geht große Datenmengen berechnen 
