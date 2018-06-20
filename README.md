@@ -39,11 +39,16 @@ Type "pip3 install Flask"
 
 # USAGE: ThinClient_server
 
-Inside the directory run:
+Inside the top directory of '/thinClient_server' run:
 
 "export FLASK_APP=thinClient_server", 
-"export FLASK_ENV=development", 
-"flask run";
+"export FLASK_ENV=development"
+
+Initialize the database by running:
+"flask init-db"
+
+Now you can run the flask server by running:
+"flask run"
 
 This will start the server.
 
