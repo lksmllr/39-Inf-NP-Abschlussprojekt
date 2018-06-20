@@ -41,9 +41,9 @@ Type "pip3 install Flask"
 
 Inside the directory run:
 
-export FLASK_APP=thinClient_server
-export FLASK_ENV=development
-flask run
+"export FLASK_APP=thinClient_server", 
+"export FLASK_ENV=development", 
+"flask run";
 
 This will start the server.
 
