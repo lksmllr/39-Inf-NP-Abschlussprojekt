@@ -32,4 +32,19 @@ Die formalen Projektanforderungen definieren sich wie folgt:
 
 
 # USAGE
-TODO
+Clone this repo to a directory on your device.
+
+Make sure that Flask is installed.
+Type "pip3 install Flask"
+
+# USAGE: ThinClient_server
+
+Inside the directory run:
+
+export FLASK_APP=thinClient_server
+export FLASK_ENV=development
+flask run
+
+This will start the server.
+
+# USAGE: ThinClient_client
