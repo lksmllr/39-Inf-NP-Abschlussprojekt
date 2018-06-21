@@ -17,6 +17,7 @@ def latest_heartbeat():
         #thinClient_id = request.form.get('id')
         print(thinClient_id)
         db = get_db()
+        cur = db.cursor()
         error = None
 
         if not thinClient_id:
@@ -25,18 +26,28 @@ def latest_heartbeat():
         elif db.execute(
             'SELECT latest_heartbeat FROM thinClients WHERE id = ?', (thinClient_id,)
         ).fetchone() is not None:
+            db.execute(
+            'UPDATE thinClients SET latest_heartbeat=? WHERE id=?', ("time", thinClient_id)
+            )
+            cur.execute("SELECT * FROM thinClients")
+            for row in cur.fetchall():
+                for val in row:
+                    print(str(val))
+            print("Client "+thinClient_id)
             error = 'ThinClient {} is already registered.'.format(thinClient_id)
 
         if error is None:
             db.execute(
-                'INSERT INTO thinClients (thinClient_id,latest_heartbeat) VALUES (?,?)',
-                (thinClient_id, datetime.datetime.now()).split('.')[0]
+                'INSERT INTO thinClients (id,latest_heartbeat) VALUES (?,?)',
+                (thinClient_id, "time")
             )
+            print('Registered Client with id: '+thinClient_id)
             db.commit()
             return flask.make_response(
                 flask.Response('OK'), 200)
 
         flash(error)
+        print(error)
 
     return flask.make_response(
                 flask.Response(error), 400)
