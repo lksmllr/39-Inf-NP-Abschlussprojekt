@@ -1,7 +1,6 @@
 import functools
 import datetime
-from http import HTTPStatus
-
+import flask
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -15,6 +14,8 @@ bp = Blueprint('heartbeat', __name__, url_prefix='/heartbeat')
 def latest_heartbeat():
     if request.method == 'POST':
         thinClient_id = request.form['id']
+        #thinClient_id = request.form.get('id')
+        print(thinClient_id)
         db = get_db()
         error = None
 
@@ -32,8 +33,10 @@ def latest_heartbeat():
                 (thinClient_id, datetime.datetime.now()).split('.')[0]
             )
             db.commit()
-            return HTTPStatus.OK
+            return flask.make_response(
+                flask.Response('OK'), 200)
 
         flash(error)
 
-    return content, HTTPStatus.BAD_REQUEST
+    return flask.make_response(
+                flask.Response(error), 400)
