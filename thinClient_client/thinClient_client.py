@@ -7,8 +7,10 @@ import time
 from sh import cd
 from threading import Thread
 
-thinClient_server_heartbeat_URL = 'http://127.0.0.1:5000/heartbeat/'
-thinClient_server_list_packages_URL = 'http://127.0.0.1:5000/list_packages/'
+thinClient_server_URL = '127.0.0.1:5000'
+thinClient_server_heartbeat_URL = 'http://'+thinClient_server_URL+'/heartbeat/'
+thinClient_server_list_packages_URL = 'http://'+thinClient_server_URL+'/list_packages/'
+thinClient_server_resource_URL = 'http://'+thinClient_server_URL+'/resources/'
 wrong_args = 'Type -h for help!'
 quit_ui = False
 
@@ -18,7 +20,15 @@ def update(package_id):
 
 # install package with id package_id
 def upgrade(package_id):
-    pass
+
+    #proc = subprocess.run('curl '+thinClient_server_resource_URL+package_id
+    #+' --output '+package_id, shell=True, check=False)
+    subprocess.Popen('curl '+thinClient_server_resource_URL+package_id
+    +' --output '+package_id, bufsize=2048, shell=True,
+    stdin=subprocess.PIPE, stdout=subprocess.PIPE, close_fds=True).wait()
+    #time.sleep(1)
+    subprocess.run('unzip '+package_id+' -d /', shell=True, check=False)
+
 
 # list available packages
 def list_packages():
@@ -136,7 +146,6 @@ def user_interface():
                 print('updating ...')
             elif args.install:
                 upgrade(args.install)
-                print('installing '+args.install+'...')
             elif args.cd:
                 cd(args.cd)
                 """
