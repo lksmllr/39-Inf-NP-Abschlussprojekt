@@ -55,6 +55,9 @@ This will start the server.
 # USAGE: ThinClient_client
 
 Inside where ever you copy the client script run:
+
 "chmod a+x thinClient_client.py"
+
 You can than start the client shell with:
+
 "./thinClient_client.py"
