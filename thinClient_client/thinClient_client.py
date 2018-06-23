@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import requests, json, uuid
-import os, sys, platform
+import os, sys, platform, subprocess
 import argparse, shlex
 
 thinClient_server_heartbeat_URL = 'http://127.0.0.1:5000/heartbeat/'
@@ -23,7 +23,7 @@ def user_interface():
             parser.add_argument("-q", "--quit", action="store_true", default=False, help="Quit ThinClientShell")
             parser.add_argument("-p", "--packages", action="store_true", help="List available packages")
             parser.add_argument("-u", "--update", help="Update Package with package_id")
-            args = parser.parse_args(shlex.split(user_input))
+            args, unknown = parser.parse_known_args(shlex.split(user_input))
 
             if args.quit:
                 print('\nGood Bye &nd have a great day!\n')
@@ -34,8 +34,13 @@ def user_interface():
             elif args.update:
                 update(args.update)
                 print('updating ...')
+            else:
+                try:
+                    subprocess.run(user_input, shell=True, check=False)
+                except SystemExit as e:
+                    pass
 
-        except SystemExit:
+        except SystemExit as e:
             pass
 
 # update package with id package_id
