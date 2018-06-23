@@ -26,6 +26,7 @@ def user_interface():
             args = parser.parse_args(shlex.split(user_input))
 
             if args.quit:
+                print('\nGood Bye &nd have a great day!\n')
                 quit_ui = True
             elif args.packages:
                 list_packages()
