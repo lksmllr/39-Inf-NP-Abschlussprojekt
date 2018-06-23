@@ -30,6 +30,9 @@ def create_app(test_config=None):
     from . import heartbeat
     app.register_blueprint(heartbeat.bp)
 
+    from . import list_packages
+    app.register_blueprint(list_packages.bp)
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
