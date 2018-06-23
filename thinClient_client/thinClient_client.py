@@ -3,6 +3,7 @@
 import requests, json, uuid
 import os, sys, platform, subprocess
 import argparse, shlex
+from sh import cd
 
 thinClient_server_heartbeat_URL = 'http://127.0.0.1:5000/heartbeat/'
 wrong_args = 'Type -h for help!'
@@ -17,12 +18,33 @@ def user_interface():
     print('\nType -h or --help for usage information.\n')
 
     while(quit_ui is not True):
-        user_input = input("ThinClientShell>>")
+        sys_path = os.getcwd()
+        sys_path = sys_path.split('/')
+        my_path = '/'+sys_path[len(sys_path)-1]
+
+        user_input = input(my_path+" ThinClientShell>>")
         try:
             parser = argparse.ArgumentParser(description="ThinClientShell")
-            parser.add_argument("-q", "--quit", action="store_true", default=False, help="Quit ThinClientShell")
-            parser.add_argument("-p", "--packages", action="store_true", help="List available packages")
-            parser.add_argument("-u", "--update", help="Update Package with package_id")
+            parser.add_argument("-q", "--quit", action="store_true"
+            , default=False, help="Quit ThinClientShell")
+            parser.add_argument("-cd", help="Change working directory")
+
+            # package functions
+            parser.add_argument("-p", "--packages", action="store_true"
+            , help="List available packages")
+            parser.add_argument("-u", "--update"
+            , help="Update Package with package_id")
+            parser.add_argument("-i", "--install"
+            , help='Install package with id package_id')
+
+            # client functions
+            parser.add_argument("-lc", "--listclients"
+            , help="List all server known clients")
+            parser.add_argument("-a", "--alive"
+            , help="Online status of client with id client_id")
+            parser.add_argument("-inf", "--info"
+            , help="Information about client with id client_id")
+
             args, unknown = parser.parse_known_args(shlex.split(user_input))
 
             if args.quit:
@@ -34,6 +56,15 @@ def user_interface():
             elif args.update:
                 update(args.update)
                 print('updating ...')
+            elif args.install:
+                upgrade(args.install)
+                print('installing '+args.install+'...')
+            elif args.cd:
+                cd(args.cd)
+                """
+                maybe auto completion, see
+                https://edwards.sdsu.edu/research/autocompletion-in-default-python-shell/
+                """
             else:
                 try:
                     subprocess.run(user_input, shell=True, check=False)
