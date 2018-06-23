@@ -44,11 +44,11 @@ def latest_heartbeat():
             # print('Registered Client with id: '+thinClient_id)
             db.commit()
             # OK
-            print_table(client_table)
+            #print_table(client_table)
             return flask.make_response(
                 flask.Response('OK'), 200)
         flash(error)
-        print_table(client_table)
+        #print_table(client_table)
         return flask.make_response(
             flask.Response('OK'), 200)
     # Bad Request

@@ -8,6 +8,7 @@ from sh import cd
 from threading import Thread
 
 thinClient_server_heartbeat_URL = 'http://127.0.0.1:5000/heartbeat/'
+thinClient_server_list_packages_URL = 'http://127.0.0.1:5000/list_packages/'
 wrong_args = 'Type -h for help!'
 quit_ui = False
 
@@ -21,7 +22,12 @@ def upgrade(package_id):
 
 # list available packages
 def list_packages():
-    pass
+    print('\nAvailable Packages are:\n')
+    r = requests.get(thinClient_server_list_packages_URL)
+    packages = json.loads(r.text)
+    for p in packages:
+        print(p)
+    print()
 
 # show information about other client
 def show(client_id):
@@ -62,12 +68,21 @@ def send_heartbeat():
     my_cpu = get_cpu()
     my_ram = get_ram()
     my_gpu = get_gpu()
+    con_refused = False
+    printed = False
     while(quit_ui is not True):
-        r = requests.post(thinClient_server_heartbeat_URL
-            , data={'id': my_id, 'cpu': my_cpu, 'ram': my_ram, 'gpu': my_gpu})
-        #if r.status_code is 200:
-            #print('Client: '+get_mac_adress()+' sent heartbeat to: '+thinClient_server_heartbeat_URL)
-        #print(r.status_code, r.reason)
+        try:
+            r = requests.post(thinClient_server_heartbeat_URL
+                , data={'id': my_id, 'cpu': my_cpu, 'ram': my_ram, 'gpu': my_gpu})
+            #if r.status_code is 200:
+                #print('Client: '+get_mac_adress()+' sent heartbeat to: '+thinClient_server_heartbeat_URL)
+            #print(r.status_code, r.reason)
+            printed = False
+        except Exception as e:
+            if printed is not True:
+                print('\n'+e)
+                print("\nConnection refused!\n")
+                printed = True
         time.sleep(1)
 
 # main loop for user interactions and or commands (shell-like)
@@ -116,7 +131,6 @@ def user_interface():
                 quit_ui = True
             elif args.packages:
                 list_packages()
-                print('Package- list')
             elif args.update:
                 update(args.update)
                 print('updating ...')
