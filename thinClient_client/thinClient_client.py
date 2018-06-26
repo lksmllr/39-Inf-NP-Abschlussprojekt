@@ -20,14 +20,10 @@ def update(package_id):
 
 # install package with id package_id
 def upgrade(package_id):
-
-    #proc = subprocess.run('curl '+thinClient_server_resource_URL+package_id
-    #+' --output '+package_id, shell=True, check=False)
-    subprocess.Popen('curl '+thinClient_server_resource_URL+package_id
-    +' --output '+package_id, bufsize=2048, shell=True,
-    stdin=subprocess.PIPE, stdout=subprocess.PIPE, close_fds=True).wait()
-    #time.sleep(1)
-    subprocess.run('unzip '+package_id+' -d /', shell=True, check=False)
+    r = requests.post(thinClient_server_resource_URL, data={'package_id': package_id})
+    f = open(package_id, 'w')
+    f.write(str(r.content))
+    f.close()
 
 
 # list available packages
