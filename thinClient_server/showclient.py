@@ -1,7 +1,7 @@
 import functools
 import datetime
 import flask
-import datetime
+from datetime import datetime, timedelta
 import os, json
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
@@ -22,7 +22,28 @@ def show_client():
 
         client_info = []
         if is_table_empty is not True:
-            # * doesnt work here for all ?!
+
+            # check if client is alive
+            cur.execute('SELECT id, latest_heartbeat FROM thinClients WHERE id=?', (client_id,))
+            for row in cur.fetchall():
+                dbtime = datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S')
+                timestamp = '{0:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
+                curtime = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+                #print(str(dtime))
+                if (dbtime + timedelta(seconds=30) < datetime.now()):
+                    db.execute(
+                    'UPDATE thinClients SET alive=? WHERE id=?'
+                    , (0, client_id)
+                    )
+                    db.commit()
+                else:
+                    db.execute(
+                    'UPDATE thinClients SET alive=? WHERE id=?'
+                    , (1, client_id)
+                    )
+                    db.commit()
+
+            # select information
             cur.execute('SELECT * FROM thinClients WHERE id=?', (client_id,))
 
             for client in cur.fetchall():

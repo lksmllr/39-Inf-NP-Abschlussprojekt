@@ -44,7 +44,7 @@ def show(client_id):
     , data={'client_id': client_id})
     client_info = json.loads(r.text)
     if len(client_info) > 0:
-        print('\nInfo\n')
+        print('\nTHIN-CLIENT-INFO\n')
         print('        ID / MAC: '+client_info[0])
         print('             CPU: '+client_info[2])
         print('             RAM: '+str(client_info[3]))
@@ -110,8 +110,8 @@ def send_heartbeat():
             printed = False
         except Exception as e:
             if printed is not True:
-                print('\n'+e)
-                print("\nConnection refused!\n")
+                print('\n'+str(e))
+                print("\nConnection refused! Type Enter...\n")
                 printed = True
         time.sleep(1)
 

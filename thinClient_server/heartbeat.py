@@ -33,6 +33,7 @@ def latest_heartbeat():
             'UPDATE thinClients SET latest_heartbeat=? WHERE id=?'
             , (timestamp, thinClient_id)
             )
+            db.commit()
             error = 'ThinClient {} is already registered.'.format(thinClient_id)
         # if new client register in db
         if error is None:
