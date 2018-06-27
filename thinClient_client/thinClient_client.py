@@ -11,6 +11,7 @@ thinClient_server_URL = '127.0.0.1:5000'
 thinClient_server_heartbeat_URL = 'http://'+thinClient_server_URL+'/heartbeat/'
 thinClient_server_list_packages_URL = 'http://'+thinClient_server_URL+'/list_packages/'
 thinClient_server_resource_URL = 'http://'+thinClient_server_URL+'/resources/'
+thinClient_server_listclients_URL = 'http://'+thinClient_server_URL+'/listclients/'
 wrong_args = 'Type -h for help!'
 quit_ui = False
 
@@ -22,7 +23,7 @@ def update(package_id):
 def upgrade(package_id):
     r = requests.post(thinClient_server_resource_URL, data={'package_id': package_id})
     f = open(package_id, 'w')
-    f.write(str(r.content))
+    f.write(str(r.text))
     f.close()
 
 
@@ -45,7 +46,15 @@ def alive(client_id):
 
 # list all ThinClients
 def list_clients():
-    pass
+    print('\nRegistered Clients:\n')
+    r = requests.get(thinClient_server_listclients_URL)
+    clients = json.loads(r.text)
+    if len(clients) > 0:
+        for client in clients:
+            print('ID: '+str(client))
+        print()
+    else:
+        print('Server doesnt know any ...\n')
 
 # returns mac adress of this machine
 def get_mac_adress():
@@ -123,7 +132,7 @@ def user_interface():
             , help='Install package with id package_id')
 
             # client functions
-            parser.add_argument("-lc", "--listclients"
+            parser.add_argument("-lc", "--listclients", action="store_true"
             , help="List all server known clients")
             parser.add_argument("-a", "--alive"
             , help="Online status of client with id client_id")
@@ -142,6 +151,8 @@ def user_interface():
                 print('updating ...')
             elif args.install:
                 upgrade(args.install)
+            elif args.listclients:
+                list_clients()
             elif args.cd:
                 cd(args.cd)
                 """
