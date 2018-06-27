@@ -12,6 +12,8 @@ thinClient_server_heartbeat_URL = 'http://'+thinClient_server_URL+'/heartbeat/'
 thinClient_server_list_packages_URL = 'http://'+thinClient_server_URL+'/list_packages/'
 thinClient_server_resource_URL = 'http://'+thinClient_server_URL+'/resources/'
 thinClient_server_listclients_URL = 'http://'+thinClient_server_URL+'/listclients/'
+thinClient_server_showclient_URL = 'http://'+thinClient_server_URL+'/showclient/'
+
 wrong_args = 'Type -h for help!'
 quit_ui = False
 
@@ -38,7 +40,20 @@ def list_packages():
 
 # show information about other client
 def show(client_id):
-    pass
+    r = requests.post(thinClient_server_showclient_URL
+    , data={'client_id': client_id})
+    client_info = json.loads(r.text)
+    if len(client_info) > 0:
+        print('\nInfo\n')
+        print('        ID / MAC: '+client_info[0])
+        print('             CPU: '+client_info[2])
+        print('             RAM: '+str(client_info[3]))
+        print('             GPU: '+client_info[4])
+        print('LATEST_HEARTBEAT: '+client_info[1])
+        print('   IS_ALIVE(1/0): '+str(client_info[5]))
+        print()
+    else:
+        print('Server doesnt know this client ...\n')
 
 # ask server if specific client is online now
 def alive(client_id):
@@ -153,6 +168,8 @@ def user_interface():
                 upgrade(args.install)
             elif args.listclients:
                 list_clients()
+            elif args.info:
+                show(args.info)
             elif args.cd:
                 cd(args.cd)
                 """

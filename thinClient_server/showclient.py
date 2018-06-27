@@ -9,28 +9,27 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 from thinClient_server.db import get_db
 
-bp = Blueprint('listclients', __name__, url_prefix='/listclients')
+bp = Blueprint('showclient', __name__, url_prefix='/showclient')
 client_table = 'thinClients'
 
 @bp.route('/', methods=('GET', 'POST'))
-def list_clients():
-    if request.method == 'GET':
+def show_client():
+    if request.method == 'POST':
+        client_id = str(request.form['client_id'])
         db = get_db()
         cur = db.cursor()
         error = None
 
-        clients = []
+        client_info = []
         if is_table_empty is not True:
-            cur.execute('SELECT id FROM thinClients')
+            # * doesnt work here for all ?!
+            cur.execute('SELECT * FROM thinClients WHERE id=?', (client_id,))
 
             for client in cur.fetchall():
-                clients.append(str(client[0]))
+                for val in client:
+                    client_info.append(val)
 
-            error = 'OK'
-        else:
-            error = 'No known Clients'
-
-        return jsonify(clients)
+            return jsonify(client_info)
 
     # Bad Request
     return flask.make_response(

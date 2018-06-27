@@ -40,6 +40,9 @@ def create_app(test_config=None):
     from . import listclients
     app.register_blueprint(listclients.bp)
 
+    from . import showclient
+    app.register_blueprint(showclient.bp)
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
