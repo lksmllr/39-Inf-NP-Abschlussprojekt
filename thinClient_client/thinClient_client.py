@@ -14,11 +14,46 @@ thinClient_server_resource_URL = 'http://'+thinClient_server_URL+'/resources/'
 thinClient_server_listclients_URL = 'http://'+thinClient_server_URL+'/listclients/'
 thinClient_server_showclient_URL = 'http://'+thinClient_server_URL+'/showclient/'
 
+# change if u like another dir to install packages
+install_dir = os.getcwd()
+
 wrong_args = 'Type -h for help!'
 quit_ui = False
 
+def get_package_name(file):
+    f_tmp = file.split('.')[0]
+    f_prefix = f_tmp.split('_')
+    return f_prefix[0]
+
+def get_version(file):
+    f_tmp = file.split('.')[0]
+    f_prefix = f_tmp.split('_')
+    return f_prefix[len(f_prefix)-1]
+
 # update package with id package_id
 def update(package_id):
+    package_name = get_package_name(package_id)
+    package_version = get_version(package_id)
+
+    files = [f for f in os.listdir('.') if os.path.isfile(f) and f.endswith('.zip')]
+    for f in files:
+        f_installed_name = get_package_name(f)
+        f_installed_version = get_version(f)
+        if str(package_name) == str(f_installed_name):
+            if int(f_installed_version) < int(package_version):
+                try:
+                    # download update
+                    try:
+                        # remove old
+                        # install update
+                        pass
+                    except SystemExit as e:
+                        pass
+
+                except requests.exceptions.RequestException as e:
+                    # error
+                    pass
+
     error = None
     try:
         pass
@@ -38,7 +73,7 @@ def upgrade(package_id):
     except requests.exceptions.RequestException as e:
         error = e
         print('\n'+str(e)+'\n')
-    if error is None:
+    if error is None and r.status_code is requests.status_codes.codes.ALL_OK   :
         content = r.content
         if content is not None:
             f = open(package_id, 'wb')
@@ -47,7 +82,15 @@ def upgrade(package_id):
             try:
                 subprocess.run('unzip '+package_id, shell=True, check=False)
             except SystemExit as e:
+                error = e
                 print('\n'+str(e)+'\n')
+            if error is None:
+                print('\nInstalled '+package_id+'\n')
+            else:
+                print('\nSomething went wrong :(\n')
+    else:
+        print('\nServer: I dont have package '+package_id
+        +'. Ask your local admin to add it.\n')
 
 
 # list available packages
@@ -81,14 +124,14 @@ def show(client_id):
             print('   IS_ALIVE(1/0): '+str(client_info[5]))
             print()
         else:
-            print('Server doesnt know this client ...\n')
+            print('\nServer doesnt know this client ...\n')
     except requests.exceptions.RequestException as e:
         print('\n'+str(e)+'\n')
 
 # ask server if specific client is online now
 def alive(client_id):
     print('\nWonder if '+str(client_id)
-    +' is alive? Type -inf '+client_id+' for more. \n')
+    +' is alive? Type -inf '+client_id+' for more information. \n')
 
 # list all ThinClients
 def list_clients():
@@ -200,7 +243,6 @@ def user_interface():
                 list_packages()
             elif args.update:
                 update(args.update)
-                print('updating ...')
             elif args.install:
                 upgrade(args.install)
             elif args.listclients:
