@@ -24,9 +24,12 @@ def update(package_id):
 # install package with id package_id
 def upgrade(package_id):
     r = requests.post(thinClient_server_resource_URL, data={'package_id': package_id})
-    f = open(package_id, 'w')
-    f.write(str(r.text))
+    f = open(package_id, 'wb')
+    f.write(r.content)
     f.close()
+
+    subprocess.run('unzip '+package_id, shell=True, check=False)
+
 
 
 # list available packages
