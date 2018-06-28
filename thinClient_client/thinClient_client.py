@@ -20,21 +20,24 @@ install_dir = os.getcwd()
 wrong_args = 'Type -h for help!'
 quit_ui = False
 
+# split file name to get the name of the package without version and ending
 def get_package_name(file):
     f_tmp = file.split('.')[0]
     f_prefix = f_tmp.split('_')
     return f_prefix[0]
 
+# split the file name to get only the version
 def get_version(file):
     f_tmp = file.split('.')[0]
     f_prefix = f_tmp.split('_')
     return f_prefix[len(f_prefix)-1]
 
 # update package with id package_id
+# this will replace old package with the new version
 def update(package_id):
+    error = None
     package_name = get_package_name(package_id)
     package_version = get_version(package_id)
-
     files = [f for f in os.listdir('.') if os.path.isfile(f) and f.endswith('.zip')]
     for f in files:
         f_installed_name = get_package_name(f)
@@ -43,28 +46,34 @@ def update(package_id):
             if int(f_installed_version) < int(package_version):
                 try:
                     # download update
-                    try:
-                        # remove old
-                        # install update
-                        pass
-                    except SystemExit as e:
-                        pass
-
+                    r = requests.post(thinClient_server_resource_URL
+                    , data={'package_id': package_id})
                 except requests.exceptions.RequestException as e:
-                    # error
-                    pass
+                    error = e
+                    print('\n'+str(e)+'\n')
+                if error is None and r.status_code is requests.status_codes.codes.ALL_OK   :
+                    content = r.content
+                    if content is not None:
+                        f = open(package_id, 'wb')
+                        f.write(content)
+                        f.close()
+                    try:
+                        # remove old folder
+                        subprocess.run('rm -r '+f_installed_name, shell=True, check=False)
+                        # install update
+                        subprocess.run('unzip '+package_id+' -d'+package_name, shell=True, check=False)
+                    except SystemExit as e:
+                        error = e
+                        print('\n'+str(e)+'\n')
+            else:
+                print('\nPackage \"'+package_name+'\" already up-to-date.\n')
+        else:
+            # install it ?
+            pass
 
-    error = None
-    try:
-        pass
-    except requests.exceptions.RequestException as e:
-        error = e
-        print('\n'+str(e)+'\n')
-        pass
-    if error is None:
-        pass
 
 # install package with id package_id
+# get file from server and install it in a folder
 def upgrade(package_id):
     error = None
     try:
@@ -80,7 +89,7 @@ def upgrade(package_id):
             f.write(content)
             f.close()
             try:
-                subprocess.run('unzip '+package_id, shell=True, check=False)
+                subprocess.run('unzip '+package_id+' -d'+get_package_name(package_id), shell=True, check=False)
             except SystemExit as e:
                 error = e
                 print('\n'+str(e)+'\n')
@@ -93,7 +102,7 @@ def upgrade(package_id):
         +'. Ask your local admin to add it.\n')
 
 
-# list available packages
+# list available packages on the thinClien_server
 def list_packages():
     error = None
     try:
@@ -109,6 +118,7 @@ def list_packages():
         print()
 
 # show information about other client
+# cant figure out how to get the gpu info
 def show(client_id):
     try:
         r = requests.post(thinClient_server_showclient_URL
@@ -129,11 +139,13 @@ def show(client_id):
         print('\n'+str(e)+'\n')
 
 # ask server if specific client is online now
+# this function is useless because its information is
+# displayed in the client info text
 def alive(client_id):
     print('\nWonder if '+str(client_id)
     +' is alive? Type -inf '+client_id+' for more information. \n')
 
-# list all ThinClients
+# list all ThinClients known by the server
 def list_clients():
     error = None
     try:
