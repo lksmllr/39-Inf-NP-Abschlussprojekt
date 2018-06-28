@@ -19,60 +19,94 @@ quit_ui = False
 
 # update package with id package_id
 def update(package_id):
-    pass
+    error = None
+    try:
+        pass
+    except requests.exceptions.RequestException as e:
+        error = e
+        print('\n'+str(e)+'\n')
+        pass
+    if error is None:
+        pass
 
 # install package with id package_id
 def upgrade(package_id):
-    r = requests.post(thinClient_server_resource_URL, data={'package_id': package_id})
-    f = open(package_id, 'wb')
-    f.write(r.content)
-    f.close()
-
-    subprocess.run('unzip '+package_id, shell=True, check=False)
-
+    error = None
+    try:
+        r = requests.post(thinClient_server_resource_URL
+        , data={'package_id': package_id})
+    except requests.exceptions.RequestException as e:
+        error = e
+        print('\n'+str(e)+'\n')
+    if error is None:
+        content = r.content
+        if content is not None:
+            f = open(package_id, 'wb')
+            f.write(content)
+            f.close()
+            try:
+                subprocess.run('unzip '+package_id, shell=True, check=False)
+            except SystemExit as e:
+                print('\n'+str(e)+'\n')
 
 
 # list available packages
 def list_packages():
-    print('\nAvailable Packages are:\n')
-    r = requests.get(thinClient_server_list_packages_URL)
-    packages = json.loads(r.text)
-    for p in packages:
-        print(p)
-    print()
+    error = None
+    try:
+        r = requests.get(thinClient_server_list_packages_URL)
+        packages = json.loads(r.text)
+    except requests.exceptions.RequestException as e:
+        error = e
+        print('\n'+str(e)+'\n')
+    if error is None:
+        print('\nAvailable Packages are:\n')
+        for p in packages:
+            print(p)
+        print()
 
 # show information about other client
 def show(client_id):
-    r = requests.post(thinClient_server_showclient_URL
-    , data={'client_id': client_id})
-    client_info = json.loads(r.text)
-    if len(client_info) > 0:
-        print('\nTHIN-CLIENT-INFO\n')
-        print('        ID / MAC: '+client_info[0])
-        print('             CPU: '+client_info[2])
-        print('             RAM: '+str(client_info[3]))
-        print('             GPU: '+client_info[4])
-        print('LATEST_HEARTBEAT: '+client_info[1])
-        print('   IS_ALIVE(1/0): '+str(client_info[5]))
-        print()
-    else:
-        print('Server doesnt know this client ...\n')
+    try:
+        r = requests.post(thinClient_server_showclient_URL
+        , data={'client_id': client_id})
+        client_info = json.loads(r.text)
+        if len(client_info) > 0:
+            print('\nTHIN-CLIENT-INFO\n')
+            print('        ID / MAC: '+client_info[0])
+            print('             CPU: '+client_info[2])
+            print('             RAM: '+str(client_info[3]))
+            print('             GPU: '+client_info[4])
+            print('LATEST_HEARTBEAT: '+client_info[1])
+            print('   IS_ALIVE(1/0): '+str(client_info[5]))
+            print()
+        else:
+            print('Server doesnt know this client ...\n')
+    except requests.exceptions.RequestException as e:
+        print('\n'+str(e)+'\n')
 
 # ask server if specific client is online now
 def alive(client_id):
-    pass
+    print('\nWonder if '+str(client_id)
+    +' is alive? Type -inf '+client_id+' for more. \n')
 
 # list all ThinClients
 def list_clients():
-    print('\nRegistered Clients:\n')
-    r = requests.get(thinClient_server_listclients_URL)
-    clients = json.loads(r.text)
-    if len(clients) > 0:
-        for client in clients:
-            print('ID: '+str(client))
-        print()
-    else:
-        print('Server doesnt know any ...\n')
+    error = None
+    try:
+        r = requests.get(thinClient_server_listclients_URL)
+    except requests.exceptions.RequestException as e:
+        error = e
+        print('\n'+str(e)+'\n')
+    if error is None:
+        print('\nRegistered Clients:\n')
+        clients = json.loads(r.text)
+        if len(clients) > 0:
+            for client in clients:
+                print('ID: '+str(client))
+            print()
+        else:
+            print('Server doesnt know any ...\n')
 
 # returns mac adress of this machine
 def get_mac_adress():
@@ -173,6 +207,8 @@ def user_interface():
                 list_clients()
             elif args.info:
                 show(args.info)
+            elif args.alive:
+                alive(args.alive)
             elif args.cd:
                 cd(args.cd)
                 """
