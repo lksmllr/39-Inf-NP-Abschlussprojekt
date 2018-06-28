@@ -1,4 +1,4 @@
-# 1. 39-Inf-NP-Abschlussprojekt
+# 39-Inf-NP-Abschlussprojekt
 Abschlussprojekt: Modulbezeichnung "39-Inf-NP Netzwerkprogrammierung", Universität Bielefeld: Technische Fakultät
 
 Siehe [Projektbeschreibung des Veranstalters](http://bibiserv.cebitec.uni-bielefeld.de/resources/lehre/netprog18/Projekt-2018.pdf)
@@ -49,7 +49,13 @@ Make sure that Flask is installed
 
 - pip3 install Flask
 
-## 3.1 USAGE: ThinClient_server
+## 3.1 Running the server
+
+If you would like to change it feel free to do so or just use it as it is. 
+
+##### Note
+To add packages to the servers resources just copy the files into 'thinClient_server/resources/'. 
+As long as you are using .zip files the server will spot them without furthermore do.
 
 ### 3.1.1 Development Environment
 
@@ -84,7 +90,7 @@ Now you can run the flask server by running:
 
 This will start the server.
 
-## 3.2 USAGE: ThinClient_client
+## 3.2 Usage of the client
 
 Inside where ever you copy the client script run
 
