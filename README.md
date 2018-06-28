@@ -1,6 +1,7 @@
 # 39-Inf-NP-Abschlussprojekt
 Abschlussprojekt: Modulbezeichnung "39-Inf-NP Netzwerkprogrammierung", Universität Bielefeld: Technische Fakultät
 
+Siehe [Projektbeschreibung des Veranstalters](http://bibiserv.cebitec.uni-bielefeld.de/resources/lehre/netprog18/Projekt-2018.pdf)
 
 ## Projektbeschreibung
 Im Rahmen dieses Projekts soll eine Client-/ Serverlösung für so genannte ThinClients entwickelt werden. Diese soll die Verwaltung und Administration der Clients implementieren. 
@@ -31,6 +32,10 @@ Die formalen Projektanforderungen definieren sich wie folgt:
 2) Implementierung in Python 3
 3) Dokumentation in Pydoc
 4) Diese Projektbeschreibung in Markdown (Usage, Beispiel)
+
+## Umsetzung
+
+**- - T O D O - -**
 
 
 # USAGE
@@ -82,7 +87,7 @@ Inside where ever you copy the client script run
 
 - chmod a+x thinClient_client.py
 
-You can than start the client shell with:
+You can than start the client shell with
 
 - ./thinClient_client.py
 
