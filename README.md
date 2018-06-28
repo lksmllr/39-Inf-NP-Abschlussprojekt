@@ -23,7 +23,7 @@ Eine Client-/ Serverlösung für so genannte ThinClients. Diese implementiert na
 1) Heartbeat
 2) Liste der bekannten Clients
 3) Informationen zu jedem Client
-4) Upgrade: Installation von Paketen (Hier .zip Dateien)
+4) Upgrade: Installation von Paketen (Hier nach **Rücksprache mit dem Dozenten im Tutorium** exemplarisch .zip Dateien)
 5) Update: Update von bereits installierten Paketen
 
 #### 1.5 Anforderungen 
