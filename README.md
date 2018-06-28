@@ -20,8 +20,10 @@ zu wollen wird oft Mals die Rechenleistung von Servern genutzt. Die technische A
 # Ziel
 Eine Client-/ Serverlösung für so genannte ThinClients. Diese implementiert nach Möglichkeit folgende Features:
 1) Heartbeat
-2) Update
-3) Upgrade
+2) Liste der bekannten Clients
+3) Informationen zu jedem Client
+4) Upgrade: Installation von Paketen (Hier .zip Dateien)
+5) Update: Update von bereits installierten Paketen
 
 # Anforderungen 
 Die formalen Projektanforderungen definieren sich wie folgt:
@@ -32,32 +34,58 @@ Die formalen Projektanforderungen definieren sich wie folgt:
 
 
 # USAGE
+
 Clone this repo to a directory on your device.
 
-Make sure that Flask is installed.
-Type "pip3 install Flask"
+Make sure that Flask is installed
+
+- pip3 install Flask
 
 # USAGE: ThinClient_server
 
-Inside the top directory of '/thinClient_server' run:
+## Development
 
-"export FLASK_APP=thinClient_server", 
-"export FLASK_ENV=development"
+Inside the top directory of '/thinClient_server' run
+
+- export FLASK_APP=thinClient_server 
+- export FLASK_ENV=development
+
+Initialize the database by running
+
+- flask init-db
+
+Now you can run the flask server by running
+
+- flask run
+
+This will start the server in debug mode.
+
+## Real
+
+Inside the top directory of '/thinClient_server' run
+
+- export FLASK_APP=thinClient_server
 
 Initialize the database by running:
-"flask init-db"
+
+- flask init-db
 
 Now you can run the flask server by running:
-"flask run"
+
+- flask run
 
 This will start the server.
 
 # USAGE: ThinClient_client
 
-Inside where ever you copy the client script run:
+Inside where ever you copy the client script run
 
-"chmod a+x thinClient_client.py"
+- chmod a+x thinClient_client.py
 
 You can than start the client shell with:
 
-"./thinClient_client.py"
+- ./thinClient_client.py
+
+### Note
+
+If you would like to change the installation directory change the global variable in thinClient_client.py
