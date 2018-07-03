@@ -33,15 +33,7 @@ Die formalen Projektanforderungen definieren sich wie folgt:
 3) Dokumentation in Pydoc
 4) Diese Projektbeschreibung in Markdown (Usage, Beispiel)
 
-# 2. Umsetzung
-
-**- - T O D O - -**
-
-### 2. Beispiel
-
-**- - T O D O - -**
-
-# 3. USAGE
+# 2. USAGE
 
 Clone this repo to a directory on your device.
 
@@ -49,7 +41,7 @@ Make sure that Flask is installed
 
 - pip3 install Flask
 
-## 3.1 Running the server
+## 2.1 Running the server
 
 If you would like to change it feel free to do so or just use it as it is. 
 
@@ -57,7 +49,7 @@ If you would like to change it feel free to do so or just use it as it is.
 To add packages to the servers resources just copy the files into 'thinClient_server/resources/'. 
 As long as you are using .zip files the server will spot them without furthermore do.
 
-### 3.1.1 Development Environment
+### 2.1.1 Development Environment
 
 Inside the top directory of '/thinClient_server' run
 
@@ -74,7 +66,7 @@ Now you can run the flask server by running
 
 This will start the server in debug mode.
 
-### 3.1.2 Real Usage
+### 2.1.2 Real Usage
 
 Inside the top directory of '/thinClient_server' run
 
@@ -90,7 +82,7 @@ Now you can run the flask server by running:
 
 This will start the server.
 
-## 3.2 Usage of the client
+## 2.2 Usage of the client
 
 Inside where ever you copy the client script run
 
