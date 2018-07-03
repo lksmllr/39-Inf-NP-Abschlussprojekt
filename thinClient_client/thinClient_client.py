@@ -11,8 +11,6 @@ thinClient_server_URL = '127.0.0.1:5000'
 thinClient_server_heartbeat_URL = 'http://'+thinClient_server_URL+'/heartbeat/'
 thinClient_server_list_packages_URL = 'http://'+thinClient_server_URL+'/list_packages/'
 thinClient_server_resource_URL = 'http://'+thinClient_server_URL+'/resources/'
-thinClient_server_listclients_URL = 'http://'+thinClient_server_URL+'/listclients/'
-thinClient_server_showclient_URL = 'http://'+thinClient_server_URL+'/showclient/'
 
 # change if u like another dir to install packages
 install_dir = os.getcwd()
@@ -117,52 +115,6 @@ def list_packages():
             print(p)
         print()
 
-# show information about other client
-# cant figure out how to get the gpu info
-def show(client_id):
-    try:
-        r = requests.post(thinClient_server_showclient_URL
-        , data={'client_id': client_id})
-        client_info = json.loads(r.text)
-        if len(client_info) > 0:
-            print('\nTHIN-CLIENT-INFO\n')
-            print('        ID / MAC: '+client_info[0])
-            print('             CPU: '+client_info[2])
-            print('             RAM: '+str(client_info[3]))
-            print('             GPU: '+client_info[4])
-            print('LATEST_HEARTBEAT: '+client_info[1])
-            print('   IS_ALIVE(1/0): '+str(client_info[5]))
-            print()
-        else:
-            print('\nServer doesnt know this client ...\n')
-    except requests.exceptions.RequestException as e:
-        print('\n'+str(e)+'\n')
-
-# ask server if specific client is online now
-# this function is useless because its information is
-# displayed in the client info text
-def alive(client_id):
-    print('\nWonder if '+str(client_id)
-    +' is alive? Type -inf '+client_id+' for more information. \n')
-
-# list all ThinClients known by the server
-def list_clients():
-    error = None
-    try:
-        r = requests.get(thinClient_server_listclients_URL)
-    except requests.exceptions.RequestException as e:
-        error = e
-        print('\n'+str(e)+'\n')
-    if error is None:
-        print('\nRegistered Clients:\n')
-        clients = json.loads(r.text)
-        if len(clients) > 0:
-            for client in clients:
-                print('ID: '+str(client))
-            print()
-        else:
-            print('Server doesnt know any ...\n')
-
 # returns mac adress of this machine
 def get_mac_adress():
     num = hex(uuid.getnode()).replace('0x','').replace('L','')
@@ -238,14 +190,6 @@ def user_interface():
             parser.add_argument("-i", "--install"
             , help='Install package with id package_id')
 
-            # client functions
-            parser.add_argument("-lc", "--listclients", action="store_true"
-            , help="List all server known clients")
-            parser.add_argument("-a", "--alive"
-            , help="Online status of client with id client_id")
-            parser.add_argument("-inf", "--info"
-            , help="Information about client with id client_id")
-
             args, unknown = parser.parse_known_args(shlex.split(user_input))
 
             if args.quit:
@@ -257,12 +201,6 @@ def user_interface():
                 update(args.update)
             elif args.install:
                 upgrade(args.install)
-            elif args.listclients:
-                list_clients()
-            elif args.info:
-                show(args.info)
-            elif args.alive:
-                alive(args.alive)
             elif args.cd:
                 cd(args.cd)
                 """
