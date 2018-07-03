@@ -41,6 +41,8 @@ Make sure that Flask is installed
 
 - pip3 install Flask
 
+Make also sure that you install missing Python 3 packages if you dont have them. See stackracd for detailed information of not installed packages.
+
 ## 2.1 Running the server
 
 If you would like to change it feel free to do so or just use it as it is. 
